@@ -9,6 +9,10 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_element_by_link_text("home page").click()
 
+    def open_home_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("home").click()
+
     def change_field_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
@@ -40,6 +44,7 @@ class ContactHelper:
 
     def create(self, contact):
         wd = self.app.wd
+        self.open_home_page()
         wd.find_element_by_link_text("add new").click()
         self.fill_contact_form(contact)
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
@@ -47,6 +52,7 @@ class ContactHelper:
 
     def edit_first_contact(self, contact):
         wd = self.app.wd
+        self.open_home_page()
         wd.find_element_by_xpath("(//a[img[@title='Edit']])[1]").click()
         self.fill_contact_form(contact)
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
@@ -54,6 +60,7 @@ class ContactHelper:
 
     def delete_first_contact(self):
         wd = self.app.wd
+        self.open_home_page()
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
