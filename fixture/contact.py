@@ -7,11 +7,16 @@ class ContactHelper:
 
     def return_to_home_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("home page").click()
+        if len(wd.find_elements_by_link_text(
+                "home page")) > 0:  # если есть ссылка, предлагающая перейти на Home page, то кликаем ее
+            wd.find_element_by_link_text("home page").click()
+        else:
+            self.open_home_page()
 
     def open_home_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("home").click()
+        if not (wd.current_url.endswith("/addressbook/") or wd.current_url.endswith("/index.php")):
+            wd.find_element_by_link_text("home").click()
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd

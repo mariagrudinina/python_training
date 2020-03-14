@@ -4,7 +4,11 @@ class GroupHelper:
 
     def return_to_groups_page(self):
         wd = self.app.wd
-        wd.find_element_by_link_text("group page").click()
+        if len(wd.find_elements_by_link_text(
+                "group page")) > 0:  # если есть ссылка, предлагающая перейти на Group, то кликаем ее
+            wd.find_element_by_link_text("group page").click()
+        else:
+            self.open_groups_page()
 
     def fill_group_form(self, group):
         self.change_field_value("group_name", group.name)
