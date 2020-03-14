@@ -66,3 +66,8 @@ class ContactHelper:
         wd.switch_to_alert().accept()
         wd.find_element_by_xpath(
             "//input[@value='Delete']")  # добавила, чтобы дождаться, когда произойдет редирект на home page
+
+    def count(self):
+        wd = self.app.wd
+        self.open_home_page()
+        return len(wd.find_elements_by_name("selected[]"))
