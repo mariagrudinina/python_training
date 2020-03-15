@@ -1,5 +1,7 @@
 from selenium.webdriver.support.ui import Select
 
+from model.contact import Contact
+
 
 class ContactHelper:
     def __init__(self, app):
@@ -69,10 +71,22 @@ class ContactHelper:
         wd.find_element_by_name("selected[]").click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
-        wd.find_element_by_xpath(
-            "//input[@value='Delete']")  # добавила, чтобы дождаться, когда произойдет редирект на home page
+        wd.find_element_by_link_text("home").click()  # добавила, иначе в new_contacts сохранялся удаленный контакт
 
     def count(self):
         wd = self.app.wd
         self.open_home_page()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.open_home_page()
+        contacts = []
+        i = 1
+        for element in wd.find_elements_by_name("entry"):
+            last_name = wd.find_element_by_xpath('((//tr[@name="entry"])/td[2])[' + str(i) + ']').text
+            first_name = wd.find_element_by_xpath('((//tr[@name="entry"])/td[3])[' + str(i) + ']').text
+            contact_id = element.find_element_by_name("selected[]").get_attribute("value")
+            contacts.append(Contact(firstname=first_name, lastname=last_name, contact_id=contact_id))
+            i += 1
+        return contacts
