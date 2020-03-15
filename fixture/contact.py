@@ -58,19 +58,25 @@ class ContactHelper:
         self.return_to_home_page()
         self.contact_cache = None
 
-    def edit_first_contact(self, contact):
+    def edit_contact_by_index(self, index, contact):
         wd = self.app.wd
         self.open_home_page()
-        wd.find_element_by_xpath("(//a[img[@title='Edit']])[1]").click()
+        wd.find_elements_by_xpath("//a[img[@title='Edit']]")[index].click()
         self.fill_contact_form(contact)
         wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
         self.return_to_home_page()
         self.contact_cache = None
 
+    def edit_first_contact(self, contact):
+        self.edit_contact_by_index(0, contact)
+
     def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
         self.open_home_page()
-        wd.find_element_by_name("selected[]").click()
+        wd.find_elements_by_name("selected[]")[index].click()
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
         wd.find_element_by_link_text("home").click()  # добавила, иначе в new_contacts сохранялся удаленный контакт
