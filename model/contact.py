@@ -6,7 +6,7 @@ class Contact:
                  company=None, address=None, home_phone_number=None, mobile_phone_number=None, work_phone_number=None,
                  fax=None, email=None, email2=None, email3=None, homepage=None, bday=None, bmonth=None, byear=None,
                  aday=None, amonth=None, ayear=None, group=None, address2=None, phone2=None, notes=None,
-                 contact_id=None):
+                 contact_id=None, all_phones_from_homepage=None):
         self.firstname = firstname
         self.middlename = middlename
         self.lastname = lastname
@@ -34,6 +34,7 @@ class Contact:
         self.phone2 = phone2
         self.notes = notes
         self.contact_id = contact_id
+        self.all_phones_from_homepage = all_phones_from_homepage
 
     def id_or_max(self):
         if self.contact_id:
