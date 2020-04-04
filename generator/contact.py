@@ -1,11 +1,26 @@
-# -*- coding: utf-8 -*-
 import random
 import string
-
-import pytest
-
-from model.contact import Contact
+import os.path
+import jsonpickle
+import getopt
+import sys
 from generator.group import random_string
+from model.contact import Contact
+
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "n:f:", ["number of contacts", "file"])
+except getopt.GetoptError as err:
+    getopt.usage()
+    sys.exit(2)
+
+n = 5
+f = "data/contacts.json"
+
+for o, a in opts:
+    if o == "-n":
+        n = int(a)
+    elif o == "-f":
+        f = a
 
 
 def random_numbers(prefix, maxlen):
@@ -26,15 +41,11 @@ testdata = [Contact(firstname="", lastname="")] + [
             address=random_string("address", 30),
             work_phone_number=random_numbers("+", 10), email=random_email("email", 5), bday="10",
             bmonth="March", byear="1990", notes=random_string("firstname", 30))
-    for i in range(5)
+    for i in range(n)
 ]
 
+file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
 
-@pytest.mark.parametrize("contact", testdata, ids=[repr(x) for x in testdata])
-def test_add_contact(app, contact):
-    old_contacts = app.contact.get_contact_list()
-    app.contact.create(contact)
-    assert len(old_contacts) + 1 == app.contact.count()
-    new_contacts = app.contact.get_contact_list()
-    old_contacts.append(contact)
-    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+with open(file, "w") as out:
+    jsonpickle.set_encoder_options("json", indent=2)
+    out.write(jsonpickle.encode(testdata))
