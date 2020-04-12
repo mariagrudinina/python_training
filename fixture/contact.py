@@ -73,6 +73,15 @@ class ContactHelper:
         self.return_to_home_page()
         self.contact_cache = None
 
+    def edit_contact_by_id(self, contact):
+        wd = self.app.wd
+        self.open_home_page()
+        self.open_contact_to_edit_by_id(contact.contact_id)
+        self.fill_contact_form(contact)
+        wd.find_element_by_xpath("(//input[@name='update'])[2]").click()
+        self.return_to_home_page()
+        self.contact_cache = None
+
     def edit_first_contact(self, contact):
         self.edit_contact_by_index(0, contact)
 
@@ -86,6 +95,19 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to_alert().accept()
         wd.find_element_by_link_text("home").click()  # добавила, иначе в new_contacts сохранялся удаленный контакт
+        self.contact_cache = None
+
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element_by_css_selector("input[id='%s']" % id).click()
+
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        self.select_contact_by_id(id)
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to_alert().accept()
+        wd.find_element_by_link_text("home").click()
         self.contact_cache = None
 
     def count(self):
@@ -124,6 +146,13 @@ class ContactHelper:
         wd = self.app.wd
         self.open_home_page()
         row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
+    def open_contact_to_edit_by_id(self, id):
+        wd = self.app.wd
+        self.open_home_page()
+        row = wd.find_element_by_xpath("//input[@id='%s']/../.." % id)
         cell = row.find_elements_by_tag_name("td")[7]
         cell.find_element_by_tag_name("a").click()
 
