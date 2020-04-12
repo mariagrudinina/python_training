@@ -38,6 +38,7 @@ def test_all_info_on_home_page(app, db):
     contact_from_home_page = sorted(contact_from_home_page, key=Contact.id_or_max)
     contact_from_db = sorted(contact_from_db, key=Contact.id_or_max)
     for i in range(len(contact_from_db)):
+        assert contact_from_home_page[i].contact_id == contact_from_db[i].contact_id
         assert contact_from_home_page[i].all_phones_from_homepage == merge_phones_like_on_home_page(contact_from_db[i])
         assert contact_from_home_page[i].firstname == contact_from_db[i].firstname
         assert contact_from_home_page[i].lastname == contact_from_db[i].lastname
